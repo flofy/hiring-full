@@ -8,9 +8,11 @@
     "fleet": "bin/fleet"
   },
   "scripts": {
+    "cli": "npm link",
     "build": "rm -rf dist && tsc",
     "test": "npm run build && cucumber-js",
-    "start": "tsc & node dist/index.js"
+    "start": "tsc & node dist/index.js",
+    "test:jest": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,7 +28,8 @@
   "author": "Florent DROYER",
   "license": "MIT",
   "dependencies": {
-    "ts-node": "^10.4.0",
+    "gluegun": "^5.2.0",
+    "ts-node": "^10.9.2",
     "typescript": "^4.5.4"
   },
   "devDependencies": {
