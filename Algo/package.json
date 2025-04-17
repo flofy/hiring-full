@@ -1,0 +1,15 @@
+{
+  "name": "algo",
+  "version": "1.0.0",
+  "description": "algo for hiring full",
+  "main": "fizzBuzz.js",
+  "license": "proprietary",
+  "scripts": {
+    "start": "tsc && node dist/fizzBuzz.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Florent DROYER",
+  "dependencies": {
+    "typescript": "^5.8.3"
+  }
+}
