@@ -1,3 +1,2 @@
-export * from './IVehicle';
-export * from './IFleet';
-export * from './ILocation';
+export * from "./IVehicle";
+export * from "./ILocation";

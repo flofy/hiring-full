@@ -1,10 +1,13 @@
-import { IVehicle, IFleet } from "../../types";
+import type { Fleet } from "./Fleet";
+import type { ILocation } from "../../types";
 
 export interface FleetRepository {
-    save(fleet: IFleet): void;
-    findById(fleetId: string): IVehicle[] | null;
-    createFleet(userId: string): string; // Returns the fleetId
-    registerVehicle(fleetId: string, vehiclePlateNumber: string): void;
-    localizeVehicle(fleetId: string, vehiclePlateNumber: string, lat: number, lng: number, alt?: number): void;
-    getVehicleLocation(fleetId: string, vehiclePlateNumber: string): { lat: number; lng: number; alt?: number } | null;
+	save(fleet: Fleet): Promise<void>;
+	findById(id: number): Promise<Fleet | null>;
+	createFleet(userId: string): Promise<number>; // Returns the fleetId
+	registerVehicle(fleetId: number, vehicleSerialNumber: string): Promise<void>;
+	localizeVehicle(
+		fleetId: number,
+		vehicleSerialNumber: string,
+	): Promise<ILocation | null>;
 }

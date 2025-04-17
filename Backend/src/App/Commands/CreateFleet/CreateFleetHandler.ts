@@ -1,26 +1,21 @@
-import { v4 as uuidv4 } from 'uuid';
-import { CreateFleetCommand } from './CreateFleetCommand';
-import { FleetRepository } from '../../../Domain/Fleet/FleetRepository';
-import { IFleet } from '../../../types';
+import { v4 as uuidv4 } from "uuid";
+import type { CreateFleetCommand } from "./CreateFleetCommand";
+import type { FleetRepository } from "../../../Domain/Fleet/FleetRepository";
+import { Fleet } from "../../../Domain/Fleet/Fleet";
 
 export class CreateFleetHandler {
-  private fleetRepository: FleetRepository;
-  
-  constructor(fleetRepository: FleetRepository) {
-    this.fleetRepository = fleetRepository;
-  }
+	private fleetRepository: FleetRepository;
 
-  handle(command: CreateFleetCommand): string {
-    const fleetId = uuidv4();
-    
-    const fleet: IFleet = {
-      id: fleetId,
-      userId: command.userId,
-      vehicles: []
-    };
-    
-    this.fleetRepository.save(fleet);
-    
-    return fleetId;
-  }
+	constructor(fleetRepository: FleetRepository) {
+		this.fleetRepository = fleetRepository;
+	}
+
+	handle(command: CreateFleetCommand): number {
+		const fleetId = Math.floor(Math.random() * 1000000);
+		const userId = uuidv4();
+		const fleet: Fleet = new Fleet(fleetId, userId);
+		this.fleetRepository.save(fleet);
+
+		return fleetId;
+	}
 }

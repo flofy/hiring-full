@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: 'fleet_db'
+      POSTGRES_USER: 'fleet_user'
+      POSTGRES_PASSWORD: 'fleet_password'
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    volumes:
+      - fleet_data:/var/lib/postgresql/data
+volumes:
+  fleet_data:

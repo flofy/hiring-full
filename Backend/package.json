@@ -1,39 +1,45 @@
 {
-  "name": "fleet-management",
-  "version": "1.0.0",
-  "description": "A vehicle fleet management application using DDD and CQRS principles.",
-  "main": "src/index.ts",
-  "private": true,
-  "bin": {
-    "fleet": "bin/fleet"
-  },
-  "scripts": {
-    "cli": "npm link",
-    "build": "rm -rf dist && tsc",
-    "test": "npm run build && cucumber-js",
-    "start": "tsc & node dist/index.js",
-    "test:jest": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/flofy/fleet-management.git"
-  },
-  "keywords": [
-    "fleet",
-    "management",
-    "vehicles",
-    "ddd",
-    "cqrs"
-  ],
-  "author": "Florent DROYER",
-  "license": "MIT",
-  "dependencies": {
-    "gluegun": "^5.2.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^4.5.4"
-  },
-  "devDependencies": {
-    "@cucumber/cucumber": "^11.2.0",
-    "@types/node": "^16.11.7"
-  }
+	"name": "fleet-management",
+	"version": "1.0.0",
+	"description": "A vehicle fleet management application using DDD and CQRS principles.",
+	"main": "src/index.ts",
+	"private": true,
+	"bin": {
+		"fleet": "bin/fleet"
+	},
+	"scripts": {
+		"cli": "npm link",
+		"init-db": "ts-node src/Infra/Persistence/Database/initDb.ts",
+		"build": "rm -rf dist && tsc",
+		"test": "npm run build && cucumber-js",
+		"start": "tsc & node dist/index.js",
+		"lint": "biome lint",
+		"lint:check": "biome check",
+		"lint:format": "biome format --write",
+		"test:jest": "jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/flofy/fleet-management.git"
+	},
+	"keywords": ["fleet", "management", "vehicles", "ddd", "cqrs"],
+	"author": "Florent DROYER",
+	"license": "MIT",
+	"dependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"dotenv": "^16.5.0",
+		"gluegun": "^5.2.0",
+		"pg": "^8.14.1",
+		"pg-hstore": "^2.3.4",
+		"reflect-metadata": "^0.2.2",
+		"sequelize": "^6.37.7",
+		"ts-node": "^10.9.2",
+		"typescript": "^4.5.4"
+	},
+	"devDependencies": {
+		"@cucumber/cucumber": "^11.2.0",
+		"@types/node": "^16.11.7",
+		"@types/pg": "^8.11.13",
+		"@types/sequelize": "^4.28.20"
+	}
 }

@@ -1,8 +1,8 @@
 {
-    "default": {
-        "formatOptions": {
-            "snippetInterface": "synchronous"
-        },
-        "import": ["./dist/features/**/*.js"]
-    }
+	"default": {
+		"formatOptions": {
+			"snippetInterface": "synchronous"
+		},
+		"import": ["./dist/features/**/*.js"]
+	}
 }

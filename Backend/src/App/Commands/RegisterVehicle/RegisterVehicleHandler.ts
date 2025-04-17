@@ -1,26 +1,30 @@
-import { RegisterVehicleCommand } from './RegisterVehicleCommand';
-import { VehicleRepository } from '../../../Domain/Vehicle/VehicleRepository';
-import { FleetRepository } from '../../../Domain/Fleet/FleetRepository';
-import { VehicleAlreadyRegisteredError } from '../../../Domain/Exceptions/VehicleAlreadyRegisteredError';
+import type { RegisterVehicleCommand } from "./RegisterVehicleCommand";
+import type { VehicleRepository } from "../../../Domain/Vehicle/VehicleRepository";
+import type { FleetRepository } from "../../../Domain/Fleet/FleetRepository";
+import { VehicleAlreadyRegisteredError } from "../../../Domain/Exceptions/VehicleAlreadyRegisteredError";
 
 export class RegisterVehicleHandler {
-    private vehicleRepository: VehicleRepository;
-    private fleetRepository: FleetRepository;
-    
-    constructor(fleetRepository: FleetRepository, vehicleRepository: VehicleRepository) {
-        this.fleetRepository = fleetRepository;
-        this.vehicleRepository = vehicleRepository;
-    }
+	private vehicleRepository: VehicleRepository;
+	private fleetRepository: FleetRepository;
 
-    public async handle(command: RegisterVehicleCommand): Promise<void> {
-        const { fleetId, vehicleSerialNumber } = command;
+	constructor(
+		fleetRepository: FleetRepository,
+		vehicleRepository: VehicleRepository,
+	) {
+		this.fleetRepository = fleetRepository;
+		this.vehicleRepository = vehicleRepository;
+	}
 
-        const vehicleExists = await this.vehicleRepository.exists(vehicleSerialNumber);
+	public async handle(command: RegisterVehicleCommand): Promise<void> {
+		const { fleetId, vehicleSerialNumber } = command;
 
-        if (vehicleExists) {
-            throw new VehicleAlreadyRegisteredError(vehicleSerialNumber);
-        }
+		const vehicleExists =
+			await this.vehicleRepository.exists(vehicleSerialNumber);
 
-        await this.vehicleRepository.registerVehicle(fleetId, vehicleSerialNumber);
-    }
+		if (vehicleExists) {
+			throw new VehicleAlreadyRegisteredError(vehicleSerialNumber);
+		}
+
+		await this.fleetRepository.registerVehicle(fleetId, vehicleSerialNumber);
+	}
 }

@@ -5,9 +5,7 @@ import { RegisterVehicleCommand } from './Commands/RegisterVehicle/RegisterVehic
 import { RegisterVehicleHandler } from './Commands/RegisterVehicle/RegisterVehicleHandler';
 import { FleetRepository } from '../Domain/Fleet/FleetRepository';
 import { VehicleRepository } from '../Domain/Vehicle/VehicleRepository';
-import { InMemoryFleetRepository } from '../Infra/Persistence/InMemory/InMemoryFleetRepository';
-import { InMemoryVehicleRepository } from '../Infra/Persistence/InMemory/InMemoryVehicleRepository';
-import { IVehicle } from '../types/IVehicle';
+import { configure } from '../Infra/Persistence';
 
 /**
  * FleetManager is an adapter that exposes the possible actions on fleets and vehicles.
@@ -30,8 +28,9 @@ export class FleetManager {
     fleetRepository?: FleetRepository, 
     vehicleRepository?: VehicleRepository
   ) {
-    this.fleetRepository = fleetRepository || new InMemoryFleetRepository();
-    this.vehicleRepository = vehicleRepository || new InMemoryVehicleRepository();
+    const defaultRepositories = configure('inmemory');
+    this.fleetRepository = fleetRepository || defaultRepositories.fleetRepository;
+    this.vehicleRepository = vehicleRepository || defaultRepositories.vehicleRepository;
     
     // Initialize handlers
     this.createFleetHandler = new CreateFleetHandler(this.fleetRepository);
@@ -42,11 +41,18 @@ export class FleetManager {
   /**
    * Gets the unique instance of FleetManager (Singleton pattern)
    */
-  public static getInstance(
+  public static async getInstance(
     fleetRepository?: FleetRepository,
     vehicleRepository?: VehicleRepository
-  ): FleetManager {
+  ): Promise<FleetManager> {
     if (!FleetManager.instance) {
+      // Si les repositories ne sont pas fournis, les configurer
+      if (!fleetRepository || !vehicleRepository) {
+        const repositories = await configure();
+        fleetRepository = fleetRepository || repositories.fleetRepository;
+        vehicleRepository = vehicleRepository || repositories.vehicleRepository;
+      }
+      
       FleetManager.instance = new FleetManager(fleetRepository, vehicleRepository);
     }
     return FleetManager.instance;
@@ -57,7 +63,7 @@ export class FleetManager {
    * @param userId User ID of the fleet owner
    * @returns ID of the created fleet
    */
-  public createFleet(userId: string): string {
+  public createFleet(userId: string): number {
     const command = new CreateFleetCommand(userId);
     return this.createFleetHandler.handle(command);
   }
@@ -67,7 +73,7 @@ export class FleetManager {
    * @param fleetId Fleet ID
    * @param serialNumber Vehicle serial number
    */
-  public registerVehicle(fleetId: string, serialNumber: string): void {
+  public registerVehicle(fleetId: number, serialNumber: string): void {
     const command = new RegisterVehicleCommand(fleetId, serialNumber);
     this.registerVehicleHandler.handle(command);
   }
@@ -78,16 +84,7 @@ export class FleetManager {
    * @param serialNumber Vehicle serial number
    * @param location Location coordinates
    */
-  public setLocation(fleetId: string, serialNumber: string, location: ILocation): void {
+  public setLocation(fleetId: number, serialNumber: string, location: ILocation): void {
     this.vehicleRepository.updateLocation(serialNumber, location);
-  }
-
-  /**
-   * Finds a fleet by its ID
-   * @param fleetId Fleet ID
-   * @returns Found fleet or null
-   */
-  public findFleetById(fleetId: string): IVehicle[] | null {
-    return this.fleetRepository.findById(fleetId);
   }
 }
