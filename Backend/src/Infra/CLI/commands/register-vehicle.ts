@@ -1,33 +1,22 @@
-import type { GluegunToolbox } from "gluegun";
-import { FleetManager } from "../../../App/index";
+import { Command } from 'commander';
+import { FleetManager } from '../../../App/index';
 
-module.exports = {
-	name: "register-vehicle",
-	description: "Register a vehicle in the specified fleet",
-	run: async (toolbox: GluegunToolbox) => {
-		const { parameters, print } = toolbox;
-		const fleetId = parameters.first;
-		const vehicleSerialNumber = parameters.second;
-
-		if (!fleetId || !vehicleSerialNumber) {
-			print.error("Fleet ID and vehicle plate number are required");
-			return;
-		}
-
-		try {
-			const fleetManager = await FleetManager.getInstance();
-			fleetManager.registerVehicle(
-				Number.parseFloat(fleetId),
-				vehicleSerialNumber,
-			);
-
-			print.success(
-				`Vehicle ${vehicleSerialNumber} registered to fleet ${fleetId}`,
-			);
-		} catch (error) {
-			print.error(
-				`Error registering vehicle: ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
-	},
-};
+export function configureCommand(program: Command) {
+  program
+    .command('register-vehicle')
+    .description('Register a vehicle in a fleet')
+    .argument('<fleetId>', 'Fleet ID')
+    .argument('<vehicleSerialNumber>', 'Vehicle serial number')
+    .action(async (fleetId, vehicleSerialNumber) => {
+      try {
+        const fleetManager = await FleetManager.getInstance();
+        fleetManager.registerVehicle(Number.parseInt(fleetId), vehicleSerialNumber);
+        
+        console.log(`Vehicle ${vehicleSerialNumber} registered in fleet ${fleetId}`);
+      } catch (error) {
+        console.error(`Error registering vehicle: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    });
+  
+  return program;
+}

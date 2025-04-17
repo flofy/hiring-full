@@ -22,13 +22,19 @@
 		"type": "git",
 		"url": "https://github.com/flofy/fleet-management.git"
 	},
-	"keywords": ["fleet", "management", "vehicles", "ddd", "cqrs"],
+	"keywords": [
+		"fleet",
+		"management",
+		"vehicles",
+		"ddd",
+		"cqrs"
+	],
 	"author": "Florent DROYER",
 	"license": "MIT",
 	"dependencies": {
 		"@biomejs/biome": "^1.9.4",
+		"commander": "^13.1.0",
 		"dotenv": "^16.5.0",
-		"gluegun": "^5.2.0",
 		"pg": "^8.14.1",
 		"pg-hstore": "^2.3.4",
 		"reflect-metadata": "^0.2.2",
@@ -38,6 +44,7 @@
 	},
 	"devDependencies": {
 		"@cucumber/cucumber": "^11.2.0",
+		"@types/commander": "^2.12.5",
 		"@types/node": "^16.11.7",
 		"@types/pg": "^8.11.13",
 		"@types/sequelize": "^4.28.20"

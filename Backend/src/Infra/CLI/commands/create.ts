@@ -1,27 +1,22 @@
-import type { GluegunToolbox } from "gluegun";
-import { FleetManager } from "../../../../src/App/index";
+import { Command } from 'commander';
+import { FleetManager } from '../../../App/index';
 
-module.exports = {
-	name: "create",
-	description: "Create a new fleet for the specified user",
-	run: async (toolbox: GluegunToolbox) => {
-		const { parameters, print } = toolbox;
-		const userId = parameters.first;
-
-		if (!userId) {
-			print.error("User ID is required");
-			return;
-		}
-
-		try {
-			const fleetManager = await FleetManager.getInstance();
-			const fleetId = fleetManager.createFleet(userId);
-
-			print.info(`Fleet created with ID: ${fleetId}`);
-		} catch (error) {
-			print.error(
-				`Error creating fleet: ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
-	},
-};
+export function configureCommand(program: Command) {
+  program
+    .command('create-fleet')
+    .description('Create a new fleet for the specified user')
+    .argument('<userId>', 'User ID')
+    .option('--db', 'Use database persistence')
+    .action(async (userId, options) => {
+      try {
+        const fleetManager = await FleetManager.getInstance();
+        const fleetId = fleetManager.createFleet(userId);
+        
+        console.log(fleetId);
+      } catch (error) {
+        console.error(`Error creating fleet: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    });
+  
+  return program;
+}

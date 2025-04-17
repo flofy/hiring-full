@@ -8,12 +8,12 @@ var wantsCompiled = process.argv.indexOf('--compiled-build') >= 0
 
 if (wantsCompiled || !devMode) {
   // this runs from the compiled javascript source
-  require(`${__dirname}/../dist/Infra/CLI`).run(process.argv)
+  require(`${__dirname}/../dist/Infra/CLI`)
 } else {
   // this runs from the typescript source (for dev only)
   // hook into ts-node so we can run typescript on the fly
   require('ts-node').register({ project: `${__dirname}/../tsconfig.json` })
   
   // run the CLI with the current process arguments
-  require(`${__dirname}/../src/Infra/CLI`).run(process.argv)
+  require(`${__dirname}/../src/Infra/CLI`)
 }
